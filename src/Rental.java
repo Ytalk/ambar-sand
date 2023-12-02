@@ -19,7 +19,8 @@ public class Rental implements Serializable{
         return price;
     }
 
-    /*public String toString(){
-        
-    }*/
+    public String toString(){
+        String rental_str = "informações do aluguel:\nDuração do aluguel: " + time + "\nPreço total: " + price + "\n\n" + equip.toString();
+        return rental_str;
+    }
 }

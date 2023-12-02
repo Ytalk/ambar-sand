@@ -37,6 +37,10 @@ public enum EquipmentAndValues implements Serializable{
         return taxPerHour;
     }
 
+    public boolean getCanHaveLesson(){
+        return canHaveLesson;
+    }
+
     public void setCanHaveLesson(boolean lesson){
         canHaveLesson = lesson;//1 ou 0
     }

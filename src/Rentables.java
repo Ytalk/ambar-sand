@@ -5,7 +5,7 @@ public interface Rentables{
 
     //public void saveToFile(String name);
 
-    //public String listAll();
+    public String listAll();
 
     //public int size();
 }

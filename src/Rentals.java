@@ -8,6 +8,11 @@ public class Rentals implements Serializable, Rentables{
         this.rentals = new ArrayList<Rental>();
     }
 
+    //@Override
+    public boolean isEmpty(){
+        return rentals.isEmpty();
+    }
+
     public String newRental(int id, int time, boolean hasLesson){
 
         if(hasLesson == true){
@@ -15,36 +20,32 @@ public class Rentals implements Serializable, Rentables{
             Lesson less = new Lesson(equipment_with_lesson);
             Rental rental = new Rental(time, less);
             rentals.add(rental);
-            return "feito";
+            return rental.toString();
         }
-
-        else if(hasLesson ==  false){
+        else{
             EquipmentWithoutLesson equipment_without_lesson = new EquipmentWithoutLesson(id);
             Rental rental = new Rental(time, equipment_without_lesson);
             rentals.add(rental);
-            return "feito";
-        }
-
-        else{
-            return "erro";
+            return rental.toString();
         }
     }
-
-    public double pega1(){
-        return rentals.get(0).totalPrice();
-    } 
 
     //invalidEquipmentException-----
 
     /*public void saveToFile(String name){
 
-    }
+    }*/
 
     public String listAll(){
+        StringBuilder rentals_list = new StringBuilder();
+        for(Rental rental : rentals){
+            rentals_list.append(rental.toString()).append("\n\n");
+        }
 
+        return rentals_list.toString();
     }
 
-    public int size(){
+    /*public int size(){
 
     }*/
 }

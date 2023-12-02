@@ -65,7 +65,16 @@ public abstract class Equipment implements Serializable, Constants{ //, invalidE
         return type;
     }
 
-    /*public String toString(){
-        
-    }*/
+    public String toString() {
+        StringBuilder equip_str = new StringBuilder();
+    
+        equip_str.append("Informações do equipamento alugado:\n")
+                 .append("Descrição: ").append(getDescription()).append("\n")
+                 .append("Taxa Básica: ").append(equipment_and_values.getBasicTax()).append("\n")
+                 .append("Taxa por Hora: ").append(equipment_and_values.getTaxPerHour()).append("\n")
+                 .append("Possui aula: ").append(equipment_and_values.getCanHaveLesson()).append("\n");
+    
+        return equip_str.toString();
+    }
+    
 }

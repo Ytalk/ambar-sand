@@ -89,15 +89,18 @@ public class AppInterface extends JFrame{
                 if(time_area.getText().isEmpty()) {
                     throw new NumberFormatException("tempo de aluguel não informado.", "TIME ERROR");
                 }
-                //aqui ficará o verificador de char
+                else if( time_area.getText().matches("\\d+") == false){
+                    throw new NumberFormatException("o tempo de aluguel não pode conter letras", "TIME ERROR");
+                }
                 else if(Integer.parseInt(time_area.getText()) < 0){
                     throw new NumberFormatException("o tempo de aluguel não pode ser negativo", "TIME ERROR");
                 }
                 else{
                     int time = Integer.parseInt(time_area.getText());
 
-                    rentals.newRental(id, time, lesson);//1 ou 2
-                    System.out.println(rentals.pega1());//testa o primeiro indice
+
+                    String confirmation_str = rentals.newRental(id, time, lesson);
+                    JOptionPane.showMessageDialog(null, confirmation_str, "Compra finalizada!", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         });
@@ -108,6 +111,16 @@ public class AppInterface extends JFrame{
         list_button.setBounds(450, 350, 150, 40);
         add(list_button);
 
+        list_button.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                if(rentals.isEmpty()){
+                    JOptionPane.showMessageDialog(null, "ainda não há alugueis", "Todos os alugueis", JOptionPane.INFORMATION_MESSAGE);
+                }
+                else
+                    JOptionPane.showMessageDialog(null, rentals.listAll(), "Todos os alugueis", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
 
 
 
