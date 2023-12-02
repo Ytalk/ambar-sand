@@ -6,7 +6,6 @@ public class SammysAPP{ // extends Rentables, NumberFormatException
         Rentals rent = new Rentals();
         rent.newRental(1, 60, false);
         new AppInterface();
-        System.out.println(rent.pega1());
     }
 
 }

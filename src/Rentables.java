@@ -1,5 +1,5 @@
 public interface Rentables{
-    //public String newRental(int id, int time, boolean hasLesson);
+    public String newRental(int id, int time, boolean hasLesson);
 
     //invalidEquipmentException();
 

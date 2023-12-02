@@ -1,21 +1,24 @@
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+
+import javax.swing.*;
+import javax.swing.text.*;
+
 
 import java.awt.*;//color
 
 public class AppInterface extends JFrame{
 
+    Rentals rentals = new Rentals();
+    int id = 1; 
+    boolean lesson = false;
+
     public AppInterface(){
 
-                setLayout(null);
-
-
+        setLayout(null);
+        setTitle("Sammys APP");//basico
+        
 
         
         JPanel time_panel = new JPanel(new BorderLayout());
@@ -28,9 +31,9 @@ public class AppInterface extends JFrame{
         time_label.setVerticalAlignment(SwingConstants.CENTER);
         time_panel.add(time_label, BorderLayout.WEST);
 
-        JTextArea time_field = new JTextArea();
-        time_field.setPreferredSize(new Dimension(250, 40));
-        time_panel.add(time_field, BorderLayout.CENTER);
+        JTextArea time_area = new JTextArea();
+        time_area.setPreferredSize(new Dimension(250, 40));
+        time_panel.add(time_area, BorderLayout.CENTER);
 
 
 
@@ -44,15 +47,60 @@ public class AppInterface extends JFrame{
         equipment_label.setVerticalAlignment(SwingConstants.CENTER);
         equipment_panel.add(equipment_label, BorderLayout.WEST);
 
-        String[] options = {"Option 1", "Option 2", "Option 3"};
-        JComboBox<String> comboBox = new JComboBox<>(options);
+        String[] types = {"jet ski", "barco pontão", "barco a remo", "canoa", "caiaque", "cadeira de praia", "guarda-sol", "gazebo"};
+        JComboBox<String> comboBox = new JComboBox<>(types);
         equipment_panel.add(comboBox, BorderLayout.CENTER);
+
+        comboBox.addActionListener(e -> {
+            JComboBox<String> source = (JComboBox<String>) e.getSource();
+            id = (source.getSelectedIndex() + 1);
+            //System.out.println("Selected Index: " + selectedIndex);
+        });
+
+
+
+        JCheckBox checkBox = new JCheckBox("incluir aula");
+        checkBox.setBounds(500, 275, 100, 40);
+        add(checkBox);
+
+        checkBox.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+
+                System.out.println("checkbox on.");
+                lesson = true;
+            } 
+            else if (e.getStateChange() == ItemEvent.DESELECTED) {
+
+                System.out.println("checkbox off.");
+                lesson = false;
+            }
+        });
 
 
 
         JButton Confirm_button = new JButton("Confirmar Aluguel");
         Confirm_button.setBounds(200, 350, 150, 40);
         add(Confirm_button);
+
+        Confirm_button.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+
+                if(time_area.getText().isEmpty()) {
+                    throw new NumberFormatException("tempo de aluguel não informado.", "TIME ERROR");
+                }
+                //aqui ficará o verificador de char
+                else if(Integer.parseInt(time_area.getText()) < 0){
+                    throw new NumberFormatException("o tempo de aluguel não pode ser negativo", "TIME ERROR");
+                }
+                else{
+                    int time = Integer.parseInt(time_area.getText());
+
+                    rentals.newRental(id, time, lesson);//1 ou 2
+                    System.out.println(rentals.pega1());//testa o primeiro indice
+                }
+            }
+        });
 
 
 
@@ -62,12 +110,7 @@ public class AppInterface extends JFrame{
 
 
 
-        JCheckBox checkBox1 = new JCheckBox("incluir aula");
-        checkBox1.setBounds(500, 275, 100, 40);
-        add(checkBox1);
 
-
-        setTitle("Sammys APP");//basico
         setPreferredSize(new Dimension(854, 480));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setBackground(new Color(100, 50, 100));

@@ -41,15 +41,16 @@ public abstract class Equipment implements Serializable, Constants{ //, invalidE
                 equipment_and_values = EquipmentAndValues.EIGHT;
                 equipment_and_values.setCanHaveLesson(false);
             break;
-            /*default:
-                throw new IllegalArgumentException("ID de equipamento inválido: " + id);*/
+
+            default:
+                throw new InvalidEquipmentException(id, "ID de equipamento inválido: ");
         }
         this.type = id;
         this.description = equipment_and_values.getDescription();
     }
 
     public double getValue(int time){
-        return (equipment_and_values.getBasicTax() + (equipment_and_values.getTaxPerHour() * (time / 60) ));
+        return (equipment_and_values.getBasicTax() + (equipment_and_values.getTaxPerHour() * (time / MINUTESPERHOUR) ));
     }
 
     /*public EquipmentAndValues getEquipmentAndValues(){
