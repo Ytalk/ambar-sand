@@ -1,10 +1,11 @@
 public class Lesson extends EquipmentWithLesson{
     double value = 20;
-    Equipment equipment;
+    //Equipment equipment;    
 
-    public Lesson(Equipment equip){
+    public Lesson(Equipment equip, boolean bool){
         super(equip.getType());
-        equipment = equip;
+        //equipment = equip;
+        //setCanHaveLesson(bool);
     }
 
     public double getValue(int time){

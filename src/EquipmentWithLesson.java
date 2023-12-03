@@ -1,8 +1,8 @@
 public class EquipmentWithLesson extends Equipment{
-    boolean lesson;
 
     public EquipmentWithLesson(int id){
         super(id);
+        setCanHaveLesson(true);
     }
 
     /*public String getLesson(){

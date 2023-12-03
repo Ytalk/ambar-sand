@@ -29,17 +29,17 @@ public abstract class Equipment implements Serializable, Constants{ //, invalidE
 
             case 6:
                 equipment_and_values = EquipmentAndValues.SIX;
-                equipment_and_values.setCanHaveLesson(false);
+                //equipment_and_values.setCanHaveLesson(false);
             break;
 
             case 7:
                 equipment_and_values = EquipmentAndValues.SEVEN;
-                equipment_and_values.setCanHaveLesson(false);
+                //equipment_and_values.setCanHaveLesson(false);
             break;
 
             case 8:
                 equipment_and_values = EquipmentAndValues.EIGHT;
-                equipment_and_values.setCanHaveLesson(false);
+                //equipment_and_values.setCanHaveLesson(false);
             break;
 
             default:
@@ -56,6 +56,10 @@ public abstract class Equipment implements Serializable, Constants{ //, invalidE
     /*public EquipmentAndValues getEquipmentAndValues(){
         return Equipment_and_values;
     }*/
+
+    public void setCanHaveLesson(boolean lesson){
+        equipment_and_values.setCanHaveLesson(lesson);
+    }
 
     public String getDescription(){
         return description;

@@ -1,5 +1,6 @@
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Rentals implements Serializable, Rentables{
     private ArrayList<Rental> rentals;
@@ -17,7 +18,7 @@ public class Rentals implements Serializable, Rentables{
 
         if(hasLesson == true){
             EquipmentWithLesson equipment_with_lesson = new EquipmentWithLesson(id);
-            Lesson less = new Lesson(equipment_with_lesson);
+            Lesson less = new Lesson(equipment_with_lesson, hasLesson);
             Rental rental = new Rental(time, less);
             rentals.add(rental);
             return rental.toString();
@@ -43,6 +44,16 @@ public class Rentals implements Serializable, Rentables{
         }
 
         return rentals_list.toString();
+    }
+
+    public List<String> listAll2() {
+        List<String> list = new ArrayList<>();
+
+        for (Rental rental : rentals) {
+            list.add(rental.toString());
+        }
+
+        return list;
     }
 
     /*public int size(){
