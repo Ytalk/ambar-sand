@@ -1,6 +1,8 @@
 import java.io.Serializable;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Rental implements Serializable{
+    private static final AtomicLong contract_counter = new AtomicLong(1);
     private long contract;
     private int time;   
     private double price;
@@ -12,6 +14,7 @@ public class Rental implements Serializable{
         this.equip = equip;
 
         price = equip.getValue(time);
+        //this.contract = contract_counter.getAndIncrement();
         //num de contrato gerado automaticamente
     }
 
@@ -20,7 +23,7 @@ public class Rental implements Serializable{
     }
 
     public String toString(){
-        String rental_str = "informações do aluguel:\nDuração do aluguel: " + time + "\nPreço total: " + price + "\n\n" + equip.toString();
+        String rental_str = "informações do aluguel:\nNúmero do contrato: " + contract + "\nDuração do aluguel: " + time + "\nPreço total: " + price + "\n\n" + equip.toString();
         return rental_str;
     }
 }

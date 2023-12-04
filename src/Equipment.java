@@ -29,17 +29,14 @@ public abstract class Equipment implements Serializable, Constants{ //, invalidE
 
             case 6:
                 equipment_and_values = EquipmentAndValues.SIX;
-                //equipment_and_values.setCanHaveLesson(false);
             break;
 
             case 7:
                 equipment_and_values = EquipmentAndValues.SEVEN;
-                //equipment_and_values.setCanHaveLesson(false);
             break;
 
             case 8:
                 equipment_and_values = EquipmentAndValues.EIGHT;
-                //equipment_and_values.setCanHaveLesson(false);
             break;
 
             default:
@@ -50,7 +47,7 @@ public abstract class Equipment implements Serializable, Constants{ //, invalidE
     }
 
     public double getValue(int time){
-        return (equipment_and_values.getBasicTax() + (equipment_and_values.getTaxPerHour() * (time / MINUTESPERHOUR) ));
+        return (equipment_and_values.getBasicTax() + (equipment_and_values.getTaxPerHour() * ( (double) time / MINUTESPERHOUR ) ));
     }
 
     /*public EquipmentAndValues getEquipmentAndValues(){

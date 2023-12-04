@@ -20,6 +20,7 @@ import javax.swing.JList;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.DefaultListCellRenderer;
 
 import java.awt.*;//color
 
@@ -33,14 +34,14 @@ public class SammysAPP extends JFrame{
 
         setLayout(null);
         setTitle("Sammys APP");//basico
-        
+
         
 
         //PAINEL RELACIONADO AO TEMPO
         JPanel time_panel = new JPanel(new BorderLayout());
         add(time_panel, BorderLayout.CENTER);
         time_panel.setBackground(new Color(100, 50, 100));
-        time_panel.setBounds(200, 100, 400, 40);////////////////////
+        time_panel.setBounds(200, 100, 400, 40);//posição e tamanho dos elementos
 
         JLabel time_label = new JLabel("Tempo de aluguel");
         time_label.setPreferredSize(new Dimension(150, 40));
@@ -49,15 +50,32 @@ public class SammysAPP extends JFrame{
         time_panel.add(time_label, BorderLayout.WEST);
 
         JTextArea time_area = new JTextArea();
-        time_area.setPreferredSize(new Dimension(250, 40));
         time_panel.add(time_area, BorderLayout.CENTER);
+
+
+
+        //CHECKBOX
+        JCheckBox checkBox = new JCheckBox("incluir aula");
+        checkBox.setBounds(500, 275, 100, 40);
+        checkBox.setBackground(new Color(100, 50, 100));
+        add(checkBox);
+
+        checkBox.addItemListener(e -> {
+            if(e.getStateChange() == ItemEvent.SELECTED){
+                lesson = true;
+            } 
+            else if(e.getStateChange() == ItemEvent.DESELECTED){
+                lesson = false;
+            }
+        });
+
 
 
         //PAINEL RELACIONADO AO EQUIPAMENTO
         JPanel equipment_panel = new JPanel(new BorderLayout());
         add(equipment_panel);
         equipment_panel.setBackground(new Color(100, 50, 100));
-        equipment_panel.setBounds(200, 200, 400, 40);//////////////////////
+        equipment_panel.setBounds(200, 200, 400, 40);//posição e tamanho dos elementos
 
         JLabel equipment_label = new JLabel("Equipamento");
         equipment_label.setPreferredSize(new Dimension(150, 40));
@@ -72,26 +90,16 @@ public class SammysAPP extends JFrame{
         comboBox.addActionListener(e -> {
             JComboBox<String> source = (JComboBox<String>) e.getSource();
             id = (source.getSelectedIndex() + 1);
-            //System.out.println("Selected Index: " + selectedIndex);
-        });
+            String selectedOption = (String) source.getSelectedItem();
 
-
-
-        JCheckBox checkBox = new JCheckBox("incluir aula");
-        checkBox.setBounds(500, 275, 100, 40);
-        checkBox.setBackground(new Color(100, 50, 100));
-        add(checkBox);
-
-        checkBox.addItemListener(e -> {
-            if (e.getStateChange() == ItemEvent.SELECTED) {
-
-                System.out.println("checkbox on.");
-                lesson = true;
+            //se elemento definitivamente sem aula. check box desabilitada
+            if( ("cadeira de praia".equals(selectedOption)) || ("guarda-sol".equals(selectedOption)) || ("gazebo".equals(selectedOption)) ){
+  
+                checkBox.setSelected(false);//desmarca
+                checkBox.setEnabled(false);//desabilita
             } 
-            else if (e.getStateChange() == ItemEvent.DESELECTED) {
-
-                System.out.println("checkbox off.");
-                lesson = false;
+            else{
+                checkBox.setEnabled(true);//operante
             }
         });
 
@@ -117,7 +125,6 @@ public class SammysAPP extends JFrame{
                 else{
                     int time = Integer.parseInt(time_area.getText());
 
-
                     String confirmation_str = rentals.newRental(id, time, lesson);
                     JOptionPane.showMessageDialog(null, confirmation_str, "Compra finalizada!", JOptionPane.INFORMATION_MESSAGE);
                 }
@@ -126,42 +133,53 @@ public class SammysAPP extends JFrame{
 
 
 
-
-        /*// Cria um JLabel com um ícone
-        ImageIcon icon = new ImageIcon("seashore\\src/imagem.jpg");
-        JLabel label = new JLabel("Sua mensagem aqui", icon, JLabel.CENTER);
-
-        // Exibe o JOptionPane com o JLabel personalizado*/
-
-
-
         JButton list_button = new JButton("Listar Alugueis");
         list_button.setBounds(450, 350, 150, 40);
         add(list_button);
 
-        list_button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (rentals.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "ainda não há alugueis", "Todos os alugueis", JOptionPane.INFORMATION_MESSAGE);
+        list_button.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if(rentals.isEmpty()){
+                    JOptionPane.showMessageDialog(null, "ainda não há alugueis", "Lista vazia", JOptionPane.INFORMATION_MESSAGE);
                 } 
-                else {
+                else{
                     ArrayList<String> dataList = new ArrayList<>(rentals.listAll2());
-        
+
                     JDialog listDialog = new JDialog();
                     listDialog.setTitle("Lista de Aluguéis");
-                    listDialog.setSize(new Dimension(400, 300));
+                    listDialog.setSize(new Dimension(400, 400));
                     listDialog.setLocationRelativeTo(null);
                     listDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        
+
                     JList<String> list = new JList<>(dataList.toArray(new String[dataList.size()]));
-        
+
+                    // Defina uma célula de renderização personalizada para quebras de linha
+                    list.setCellRenderer(new DefaultListCellRenderer() {
+                        @Override
+                        public Component getListCellRendererComponent(JList<?> list, Object value, int index,
+                                boolean isSelected, boolean cellHasFocus) {
+                            // Adicione quebras de linha entre as informações
+                            String[] lines = value.toString().split("\n");
+
+                            StringBuilder html = new StringBuilder("<html>");
+                            for (String line : lines) {
+                                html.append(line).append("<br>");
+                            }
+                            html.append("</html>");
+
+                            return super.getListCellRendererComponent(list, html.toString(), index, isSelected,
+                                    cellHasFocus);
+                        }
+                    });
+
                     JScrollPane scrollPane = new JScrollPane(list);
                     listDialog.add(scrollPane);
-        
+
                     listDialog.setVisible(true);
                 }
             }
         });
+
 
 
 

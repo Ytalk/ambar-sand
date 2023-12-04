@@ -23,7 +23,6 @@ public enum EquipmentAndValues implements Serializable{
         description = desc;
         basicTax = tax;
         taxPerHour = perHour;
-        //canHaveLesson = lesson;
     }
 
     public String getDescription(){

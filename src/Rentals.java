@@ -18,7 +18,7 @@ public class Rentals implements Serializable, Rentables{
 
         if(hasLesson == true){
             EquipmentWithLesson equipment_with_lesson = new EquipmentWithLesson(id);
-            Lesson less = new Lesson(equipment_with_lesson, hasLesson);
+            Lesson less = new Lesson(equipment_with_lesson);
             Rental rental = new Rental(time, less);
             rentals.add(rental);
             return rental.toString();
@@ -48,11 +48,16 @@ public class Rentals implements Serializable, Rentables{
 
     public List<String> listAll2() {
         List<String> list = new ArrayList<>();
-
-        for (Rental rental : rentals) {
-            list.add(rental.toString());
+    
+        for (int i = 0; i < rentals.size(); i++) {
+            list.add(rentals.get(i).toString());
+    
+            // Adicione uma linha vazia entre os aluguéis, exceto para o último aluguel
+            if (i < rentals.size() - 1) {
+                list.add("\n=================================================");
+            }
         }
-
+    
         return list;
     }
 
