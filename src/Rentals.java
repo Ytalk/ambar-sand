@@ -1,3 +1,8 @@
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +11,7 @@ public class Rentals implements Serializable, Rentables{
     private ArrayList<Rental> rentals;
 
     public Rentals(){
-        this.rentals = new ArrayList<Rental>();
+        this.rentals = new ArrayList<>();
     }
 
     //@Override
@@ -15,6 +20,16 @@ public class Rentals implements Serializable, Rentables{
     }
 
     public String newRental(int id, int time, boolean hasLesson){
+
+        /*try{
+            if(id > EquipmentAndValues.values().length){
+                throw new invalidEquipmentException(id, "equipamento inválido com o id: ");
+            }
+        }
+        catch(invalidEquipmentException e){
+            return "error";
+        }
+        */
 
         if(hasLesson == true){
             EquipmentWithLesson equipment_with_lesson = new EquipmentWithLesson(id);
@@ -29,13 +44,33 @@ public class Rentals implements Serializable, Rentables{
             rentals.add(rental);
             return rental.toString();
         }
+        
     }
 
-    //invalidEquipmentException-----
 
-    /*public void saveToFile(String name){
+    public void saveToFile(String name){
+    
+        try (ObjectOutputStream writer = new ObjectOutputStream(new FileOutputStream("ambar.byte"))) {
+            writer.writeObject(rentals);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-    }*/
+        //writer.close();
+    }
+
+    public void loadFile(){
+        try (ObjectInputStream reader = new ObjectInputStream(new FileInputStream("ambar.byte"))) {
+            // Limpa a lista atual antes de carregar os dados do arquivo
+            rentals.clear();
+            
+            // Lê os objetos do arquivo e adiciona à lista
+            rentals.addAll((ArrayList<Rental>) reader.readObject());
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
     public String listAll(){
         StringBuilder rentals_list = new StringBuilder();
@@ -46,10 +81,10 @@ public class Rentals implements Serializable, Rentables{
         return rentals_list.toString();
     }
 
-    public List<String> listAll2() {
+    public List<String> listAll2(){
         List<String> list = new ArrayList<>();
     
-        for (int i = 0; i < rentals.size(); i++) {
+        for (int i = 0; i < rentals.size(); i++){
             list.add(rentals.get(i).toString());
     
             // Adicione uma linha vazia entre os aluguéis, exceto para o último aluguel

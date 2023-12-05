@@ -3,7 +3,7 @@ public interface Rentables{
 
     //invalidEquipmentException();
 
-    //public void saveToFile(String name);
+    public void saveToFile(String name);
 
     public String listAll();
 

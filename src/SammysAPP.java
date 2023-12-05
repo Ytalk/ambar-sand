@@ -3,7 +3,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 
-//import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -33,18 +32,26 @@ public class SammysAPP extends JFrame{
     public SammysAPP(){
 
         setLayout(null);
-        setTitle("Sammys APP");//basico
+        setTitle("Ambar Sand");//basico
+
+
+
+        /*JLabel icon_label = new JLabel();
+        ImageIcon icon = new ImageIcon("surfboard.png");
+        icon_label.setIcon(icon);
+        add(icon_label);
+        icon_label.setBounds(100, 100, 200, 200);*/
 
         
 
         //PAINEL RELACIONADO AO TEMPO
         JPanel time_panel = new JPanel(new BorderLayout());
         add(time_panel, BorderLayout.CENTER);
-        time_panel.setBackground(new Color(100, 50, 100));
-        time_panel.setBounds(200, 100, 400, 40);//posição e tamanho dos elementos
+        time_panel.setBackground(new Color(255, 192, 5));
+        time_panel.setBounds(200, 100, 400, 35);//posição e tamanho dos elementos
 
         JLabel time_label = new JLabel("Tempo de aluguel");
-        time_label.setPreferredSize(new Dimension(150, 40));
+        time_label.setPreferredSize(new Dimension(150, 35));
         time_label.setHorizontalAlignment(SwingConstants.CENTER);
         time_label.setVerticalAlignment(SwingConstants.CENTER);
         time_panel.add(time_label, BorderLayout.WEST);
@@ -56,8 +63,8 @@ public class SammysAPP extends JFrame{
 
         //CHECKBOX
         JCheckBox checkBox = new JCheckBox("incluir aula");
-        checkBox.setBounds(500, 275, 100, 40);
-        checkBox.setBackground(new Color(100, 50, 100));
+        checkBox.setBounds(500, 275, 100, 35);
+        checkBox.setBackground(new Color(255, 192, 5));
         add(checkBox);
 
         checkBox.addItemListener(e -> {
@@ -74,11 +81,11 @@ public class SammysAPP extends JFrame{
         //PAINEL RELACIONADO AO EQUIPAMENTO
         JPanel equipment_panel = new JPanel(new BorderLayout());
         add(equipment_panel);
-        equipment_panel.setBackground(new Color(100, 50, 100));
-        equipment_panel.setBounds(200, 200, 400, 40);//posição e tamanho dos elementos
+        equipment_panel.setBackground(new Color(255, 192, 5));
+        equipment_panel.setBounds(200, 200, 400, 35);//posição e tamanho dos elementos
 
         JLabel equipment_label = new JLabel("Equipamento");
-        equipment_label.setPreferredSize(new Dimension(150, 40));
+        equipment_label.setPreferredSize(new Dimension(150, 35));
         equipment_label.setHorizontalAlignment(SwingConstants.CENTER);
         equipment_label.setVerticalAlignment(SwingConstants.CENTER);
         equipment_panel.add(equipment_label, BorderLayout.WEST);
@@ -94,7 +101,6 @@ public class SammysAPP extends JFrame{
 
             //se elemento definitivamente sem aula. check box desabilitada
             if( ("cadeira de praia".equals(selectedOption)) || ("guarda-sol".equals(selectedOption)) || ("gazebo".equals(selectedOption)) ){
-  
                 checkBox.setSelected(false);//desmarca
                 checkBox.setEnabled(false);//desabilita
             } 
@@ -105,48 +111,56 @@ public class SammysAPP extends JFrame{
 
 
 
+        //aluga ou trata erro
         JButton Confirm_button = new JButton("Confirmar Aluguel");
-        Confirm_button.setBounds(200, 350, 150, 40);
+        Confirm_button.setBounds(230, 350, 140, 35);
         add(Confirm_button);
 
         Confirm_button.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
+                try{
+                    if(time_area.getText().isEmpty()) {
+                        throw new NumberFormatException("tempo de aluguel não informado.", "TIME ERROR");
+                    } 
+                    else if(!time_area.getText().matches("\\d+")) {
+                        throw new NumberFormatException("o tempo de aluguel não pode conter letras", "TIME ERROR");
+                    } 
+                    else if (Integer.parseInt(time_area.getText()) <= 0) {
+                        throw new NumberFormatException("o tempo de aluguel não pode ser zero ou negativo", "TIME ERROR");
+                    } 
+                    else{
+                        int time = Integer.parseInt(time_area.getText());
 
-                if(time_area.getText().isEmpty()) {
-                    throw new NumberFormatException("tempo de aluguel não informado.", "TIME ERROR");
+                        String confirmation_str = rentals.newRental(id, time, lesson);
+                        JOptionPane.showMessageDialog(null, confirmation_str, "Compra finalizada!", JOptionPane.INFORMATION_MESSAGE);
+                    }
                 }
-                else if( time_area.getText().matches("\\d+") == false){
-                    throw new NumberFormatException("o tempo de aluguel não pode conter letras", "TIME ERROR");
-                }
-                else if(Integer.parseInt(time_area.getText()) < 0){
-                    throw new NumberFormatException("o tempo de aluguel não pode ser negativo", "TIME ERROR");
-                }
-                else{
-                    int time = Integer.parseInt(time_area.getText());
-
-                    String confirmation_str = rentals.newRental(id, time, lesson);
-                    JOptionPane.showMessageDialog(null, confirmation_str, "Compra finalizada!", JOptionPane.INFORMATION_MESSAGE);
+                catch(NumberFormatException ex){
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
 
 
 
-        JButton list_button = new JButton("Listar Alugueis");
-        list_button.setBounds(450, 350, 150, 40);
+        JButton list_button = new JButton("Listar Aluguéis");
+        list_button.setBounds(460, 350, 140, 35);
         add(list_button);
 
         list_button.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 if(rentals.isEmpty()){
-                    JOptionPane.showMessageDialog(null, "ainda não há alugueis", "Lista vazia", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "ainda não há alugueis!", "Lista vazia", JOptionPane.INFORMATION_MESSAGE);
+                    rentals.loadFile();
                 } 
                 else{
+                    rentals.saveToFile("null");
+
                     ArrayList<String> dataList = new ArrayList<>(rentals.listAll2());
 
                     JDialog listDialog = new JDialog();
-                    listDialog.setTitle("Lista de Aluguéis");
+                    listDialog.setTitle("Lista de aluguéis");
                     listDialog.setSize(new Dimension(400, 400));
                     listDialog.setLocationRelativeTo(null);
                     listDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -185,7 +199,7 @@ public class SammysAPP extends JFrame{
 
         setPreferredSize(new Dimension(854, 480));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        getContentPane().setBackground(new Color(100, 50, 100));
+        getContentPane().setBackground(new Color(255, 192, 5));
         setLocationRelativeTo(null);
         setVisible(true);
         pack();

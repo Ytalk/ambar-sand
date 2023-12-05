@@ -50,9 +50,9 @@ public abstract class Equipment implements Serializable, Constants{ //, invalidE
         return (equipment_and_values.getBasicTax() + (equipment_and_values.getTaxPerHour() * ( (double) time / MINUTESPERHOUR ) ));
     }
 
-    /*public EquipmentAndValues getEquipmentAndValues(){
-        return Equipment_and_values;
-    }*/
+    public EquipmentAndValues getEquipmentAndValues(){
+        return equipment_and_values;
+    }
 
     public void setCanHaveLesson(boolean lesson){
         equipment_and_values.setCanHaveLesson(lesson);
@@ -73,7 +73,7 @@ public abstract class Equipment implements Serializable, Constants{ //, invalidE
                  .append("Descrição: ").append(getDescription()).append("\n")
                  .append("Taxa Básica: ").append(equipment_and_values.getBasicTax()).append("\n")
                  .append("Taxa por Hora: ").append(equipment_and_values.getTaxPerHour()).append("\n")
-                 .append("Possui aula: ").append(equipment_and_values.getCanHaveLesson()).append("\n");
+                 .append("Possui aula: ").append(equipment_and_values.getCanHaveLesson() ? "sim" : "não").append("\n");//if else compacto
     
         return equip_str.toString();
     }

@@ -7,6 +7,7 @@ public enum EquipmentAndValues implements Serializable{
     THREE("barco a remo", 15.0, 20.0),
     FOUR("canoa", 12.0, 20.0),
     FIVE("caiaque", 10.0, 20.0),
+    
     SIX("cadeira de praia", 2.0, 5.0),//definitivamente sem aula
     SEVEN("guarda-sol", 1.0, 5.0),
     EIGHT("gazebo", 3.0, 7.0);
@@ -42,6 +43,6 @@ public enum EquipmentAndValues implements Serializable{
     }
 
     public void setCanHaveLesson(boolean lesson){
-        canHaveLesson = lesson;//1 ou 0
+        canHaveLesson = lesson;
     }
 }

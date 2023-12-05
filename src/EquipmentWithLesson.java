@@ -5,13 +5,6 @@ public class EquipmentWithLesson extends Equipment{
         setCanHaveLesson(true);
     }
 
-    /*public String getLesson(){
-        if(lesson == true)
-            return "sim";
-        else
-            return "não";
-    }*/
-
     public double getValue(int time){
         return ( super.getValue(time) );
     }

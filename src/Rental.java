@@ -14,8 +14,7 @@ public class Rental implements Serializable{
         this.equip = equip;
 
         price = equip.getValue(time);
-        //this.contract = contract_counter.getAndIncrement();
-        //num de contrato gerado automaticamente
+        this.contract = contract_counter.getAndIncrement();
     }
 
     public double totalPrice(){
