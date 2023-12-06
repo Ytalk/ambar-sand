@@ -1,11 +1,11 @@
 import java.io.Serializable;
 
-public abstract class Equipment implements Serializable, Constants{ //, invalidEquipmentException  extends EquipmentAndValues
+public abstract class Equipment implements Serializable, Constants{
     private int type;
     private String description;
-    private EquipmentAndValues equipment_and_values;//TAXA BASICA DE ALUGUEL
+    private EquipmentAndValues equipment_and_values;
 
-    public Equipment(int id){
+    public Equipment(int id){//id responsável por atribuir enum
         switch (id){
             case 1:
                 equipment_and_values = EquipmentAndValues.ONE;
@@ -40,13 +40,13 @@ public abstract class Equipment implements Serializable, Constants{ //, invalidE
             break;
 
             default:
-                throw new InvalidEquipmentException(id, "ID de equipamento inválido: ");
+                throw new InvalidEquipmentException(id, "ID de equipamento inválido: ");//lança exceção
         }
         this.type = id;
-        this.description = equipment_and_values.getDescription();
+        this.description = equipment_and_values.getDescription();//primeiro campo: nome
     }
 
-    public double getValue(int time){
+    public double getValue(int time){//calculo valor total do aluguel
         return (equipment_and_values.getBasicTax() + (equipment_and_values.getTaxPerHour() * ( (double) time / MINUTESPERHOUR ) ));
     }
 

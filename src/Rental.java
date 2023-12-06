@@ -2,12 +2,12 @@ import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Rental implements Serializable{
-    private static final AtomicLong contract_counter = new AtomicLong(1);
+    private static final AtomicLong contract_counter = new AtomicLong(1);//contador para instâncias unicas
     private long contract;
     private int time;   
     private double price;
 
-    private Equipment equip;
+    private Equipment equip;//usado para gerar informações toString e getPrice
 
     public Rental(int time, Equipment equip){
         this.time = time; 

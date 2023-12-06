@@ -7,5 +7,5 @@ public interface Rentables{
 
     public String listAll();
 
-    //public int size();
+    //public int size(); //não implementado para não deixar o código redundante.
 }
