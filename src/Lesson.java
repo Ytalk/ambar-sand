@@ -1,4 +1,5 @@
 public class Lesson extends EquipmentWithLesson{
+    
     double value = 20;
     //Equipment equipment;    
 
@@ -7,7 +8,9 @@ public class Lesson extends EquipmentWithLesson{
         //equipment = equip;
     }
 
+
     public double getValue(int time){
-        return ( super.getValue(time) + value );
+        return ( super.getValue(time) + value );//adiciona a aula ao valor total
     }
+
 }

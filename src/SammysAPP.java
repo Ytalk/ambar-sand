@@ -1,9 +1,10 @@
+import java.util.ArrayList;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.util.ArrayList;
+import java.awt.*;//color
 
-import javax.swing.text.*;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -25,23 +26,18 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.DefaultListCellRenderer;
 
-import java.awt.*;//color
-
 public class SammysAPP extends JFrame{
     
     Rentals rentals = new Rentals();
-    int id = 1;
-    boolean lesson = false;
-    
+    int id = 1;//valor iniciado no estado natural
+    boolean lesson;
 
     public SammysAPP(){
         rentals.loadFile();
 
-        setLayout(null);
-        setTitle("Ambar Sand");//basico
+        
 
-
-
+        //MENU
         JMenuBar mb = new JMenuBar();  
         JMenu menu = new JMenu("file");
         JMenuItem salvar = new JMenuItem("salvar");
@@ -50,31 +46,22 @@ public class SammysAPP extends JFrame{
         mb.add(menu);
         add(mb);
 
-
         mb.setBackground(new Color (255, 160, 0));
         setJMenuBar(mb);
 
-
-        salvar.addActionListener(new ActionListener() {
+        salvar.addActionListener(new ActionListener(){//primeira classe anônima
             @Override
-            public void actionPerformed(ActionEvent e) {
-                // Adicione o código da ação desejada aqui
+            public void actionPerformed(ActionEvent e){
                 rentals.saveToFile("null");
-                JOptionPane.showMessageDialog(null, "arquivo salvo");
+                JOptionPane.showMessageDialog(null, "Salvo com sucesso!", "Salvamento concluido", JOptionPane.INFORMATION_MESSAGE);
             }
         });
-
-        /*JLabel icon_label = new JLabel();
-        ImageIcon icon = new ImageIcon("surfboard.png");
-        icon_label.setIcon(icon);
-        add(icon_label);
-        icon_label.setBounds(100, 100, 200, 200);*/
 
         
 
         //PAINEL RELACIONADO AO TEMPO
         JPanel time_panel = new JPanel(new BorderLayout());
-        add(time_panel, BorderLayout.CENTER);
+        add(time_panel);
         time_panel.setBackground(new Color(255, 191, 0));
         time_panel.setBounds(220, 100, 400, 30);//posição e tamanho dos elementos
 
@@ -87,23 +74,16 @@ public class SammysAPP extends JFrame{
         JTextArea time_area = new JTextArea();
         time_panel.add(time_area, BorderLayout.CENTER);
 
-        time_area.setLineWrap(true); // Define quebra de linha automática
-        time_area.setWrapStyleWord(true); // Define quebra de linha por palavras
-
-        // Configurações adicionais para centralizar o texto
-        time_area.setAlignmentX(Component.CENTER_ALIGNMENT);
-        time_area.setAlignmentY(Component.CENTER_ALIGNMENT);
-
 
 
         //CHECKBOX
-        JCheckBox checkBox = new JCheckBox("incluir aula");
-        checkBox.setBounds(530, 250, 90, 30);
-        checkBox.setBackground(new Color(255, 191, 0));
-        add(checkBox);
+        JCheckBox check_box = new JCheckBox("incluir aula");
+        check_box.setBounds(530, 250, 90, 30);//posição e tamanho
+        check_box.setBackground(new Color(255, 191, 0));
+        add(check_box);
 
-        checkBox.addItemListener(e -> {
-            if(e.getStateChange() == ItemEvent.SELECTED){
+        check_box.addItemListener(e -> {//primeira classe anônima compacta
+            if(e.getStateChange() == ItemEvent.SELECTED){//usando 'e' para aprender
                 lesson = true;
             } 
             else if(e.getStateChange() == ItemEvent.DESELECTED){
@@ -126,27 +106,27 @@ public class SammysAPP extends JFrame{
         equipment_panel.add(equipment_label, BorderLayout.WEST);
 
         String[] types = {"jet ski", "barco pontão", "barco a remo", "canoa", "caiaque", "cadeira de praia", "guarda-sol", "gazebo"};
-        JComboBox<String> comboBox = new JComboBox<>(types);
-        equipment_panel.add(comboBox, BorderLayout.CENTER);
+        JComboBox<String> combo_box = new JComboBox<>(types);
+        equipment_panel.add(combo_box, BorderLayout.CENTER);
 
-        comboBox.addActionListener(e -> {
-            JComboBox<String> source = (JComboBox<String>) e.getSource();
-            id = (source.getSelectedIndex() + 1);
-            String selectedOption = (String) source.getSelectedItem();
+        combo_box.addActionListener(e -> {
 
-            //se elemento definitivamente sem aula. check box desabilitada
-            if( ("cadeira de praia".equals(selectedOption)) || ("guarda-sol".equals(selectedOption)) || ("gazebo".equals(selectedOption)) ){
-                checkBox.setSelected(false);//desmarca
-                checkBox.setEnabled(false);//desabilita
+            JComboBox<String> temp_combo = (JComboBox<String>) e.getSource();//usando tempóraria apenas para aprender
+            id = (temp_combo.getSelectedIndex() + 1);
+            String description = (String) temp_combo.getSelectedItem();
+
+            if( ("cadeira de praia".equals(description)) || ("guarda-sol".equals(description)) || ("gazebo".equals(description)) ){//definitivamente sem aula
+                check_box.setSelected(false);//desmarca
+                check_box.setEnabled(false);//desabilita
             } 
             else{
-                checkBox.setEnabled(true);//operante
+                check_box.setEnabled(true);//operante
             }
         });
 
 
 
-        //aluga ou trata erro
+        //ALUGA OU TRATA ERRO
         JButton Confirm_button = new JButton("Confirmar Aluguel");
         Confirm_button.setBounds(220, 300, 136, 30);
         add(Confirm_button);
@@ -155,29 +135,35 @@ public class SammysAPP extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e){
 
-                if(time_area.getText().isEmpty()) {
-                    throw new NumberFormatException("tempo de aluguel não informado!", "TIME ERROR");
-                } 
-                else if(!time_area.getText().matches("-?\\d+")) {
-                    throw new NumberFormatException("o tempo de aluguel não pode conter letras!", "TIME ERROR");
-                } 
-                else if (Integer.parseInt(time_area.getText()) <= 30) {
-                    throw new NumberFormatException("o tempo de aluguel não pode ser abaixo de 30 minutos!", "TIME ERROR");
-                }
-                else{
-                    int time = Integer.parseInt(time_area.getText());
+                try{
+                    if(time_area.getText().isEmpty()){
+                        throw new NumberFormatException("Tempo de aluguel não informado!", "TIME ERROR");
+                    }
+                    else if(!time_area.getText().matches("-?\\d+")){
+                        throw new NumberFormatException("Tempo de aluguel não pode conter letras!", "TIME ERROR");
+                    }
+                    else if (Integer.parseInt(time_area.getText()) < 30){
+                        throw new NumberFormatException("Tempo de aluguel não pode ser abaixo de 30 minutos!", "TIME ERROR");
+                    }
 
-                    String confirmation_str = rentals.newRental(id, time, lesson);
-                    JOptionPane.showMessageDialog(null, confirmation_str, "Compra finalizada!", JOptionPane.INFORMATION_MESSAGE);
-                }
+                    else{
+                        int time = Integer.parseInt(time_area.getText());
 
+                        String confirmation_str = rentals.newRental(id, time, lesson);
+                        JOptionPane.showMessageDialog(null, confirmation_str, "Compra finalizada", JOptionPane.INFORMATION_MESSAGE);
+                    }
+
+                }
+                catch(NumberFormatException ex){
+                    ex.showMessage();
+                }
             }
         });
 
 
 
         JButton list_button = new JButton("Listar Aluguéis");
-        list_button.setBounds(485, 300, 136, 30);
+        list_button.setBounds(485, 300, 136, 30);//posição e tamanho
         add(list_button);
 
         list_button.addActionListener(new ActionListener(){
@@ -215,9 +201,8 @@ public class SammysAPP extends JFrame{
                         }
                     });
 
-                    JScrollPane scrollPane = new JScrollPane(list);
-                    listDialog.add(scrollPane);
-
+                    JScrollPane scroll = new JScrollPane(list);
+                    listDialog.add(scroll);
                     listDialog.setVisible(true);
                 }
             }
@@ -225,15 +210,16 @@ public class SammysAPP extends JFrame{
 
 
 
-
+        //DETALHES DO FRAME
+        setLayout(null);
+        setTitle("Ambar Sand");
         setPreferredSize(new Dimension(854, 480));
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setBackground(new Color(255, 191, 0));
-        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        pack();//empacota/organiza
+        setLocationRelativeTo(null);//centraliza
         setVisible(true);
-        pack();
-
-
+        
     }
 
         

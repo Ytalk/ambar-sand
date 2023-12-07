@@ -1,9 +1,11 @@
 import java.io.Serializable;
 
 public abstract class Equipment implements Serializable, Constants{
+
     private int type;
     private String description;
     private EquipmentAndValues equipment_and_values;
+
 
     public Equipment(int id){//id responsável por atribuir enum
         switch (id){
@@ -40,36 +42,42 @@ public abstract class Equipment implements Serializable, Constants{
             break;
 
             default:
-                throw new InvalidEquipmentException(id, "ID de equipamento inválido: ");//lança exceção
+                throw new InvalidEquipmentException(id, "Equipamento inválido com ID: ");//lança exceção
         }
         this.type = id;
         this.description = equipment_and_values.getDescription();//primeiro campo: nome
     }
 
-    public double getValue(int time){//calculo valor total do aluguel
-        return (equipment_and_values.getBasicTax() + (equipment_and_values.getTaxPerHour() * ( (double) time / MINUTESPERHOUR ) ));
+
+    public double getValue(int time){//calculo valor total do aluguel, mas não usa diretamente
+        return (equipment_and_values.getBasicTax() + (equipment_and_values.getTaxPerHour() * ( (double) time / MINUTESPERHOUR ) ));//sem cast ele considera como int por conta do time
     }
+
 
     public EquipmentAndValues getEquipmentAndValues(){
         return equipment_and_values;
     }
 
+
     public void setCanHaveLesson(boolean lesson){
         equipment_and_values.setCanHaveLesson(lesson);
     }
+
 
     public String getDescription(){
         return description;
     }
 
+
     public int getType(){
         return type;
     }
 
-    public String toString() {
+
+    public String toString(){
         StringBuilder equip_str = new StringBuilder();
     
-        equip_str.append("Informações do equipamento alugado:\n")
+        equip_str.append("INFORMAÇÕES DE ALUGUEL DO EQUIPAMENTO:\n")
                  .append("Descrição: ").append(getDescription()).append("\n")
                  .append("Taxa Básica: ").append(equipment_and_values.getBasicTax()).append("\n")
                  .append("Taxa por Hora: ").append(equipment_and_values.getTaxPerHour()).append("\n")
@@ -77,5 +85,5 @@ public abstract class Equipment implements Serializable, Constants{
     
         return equip_str.toString();
     }
-    
+
 }

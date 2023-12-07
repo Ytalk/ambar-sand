@@ -5,7 +5,9 @@ public class EquipmentWithLesson extends Equipment{
         setCanHaveLesson(true);
     }
 
+    
     public double getValue(int time){
-        return ( super.getValue(time) );
+        return super.getValue(time);
     }
+
 }

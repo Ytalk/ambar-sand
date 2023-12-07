@@ -26,23 +26,29 @@ public enum EquipmentAndValues implements Serializable{
         taxPerHour = perHour;
     }
 
+
     public String getDescription(){
         return description;
     }
+    
 
     public double getBasicTax(){
         return basicTax;
     }
 
+
     public double getTaxPerHour(){
         return taxPerHour;
     }
+
 
     public boolean getCanHaveLesson(){
         return canHaveLesson;
     }
 
+
     public void setCanHaveLesson(boolean lesson){
         canHaveLesson = lesson;
     }
+    
 }

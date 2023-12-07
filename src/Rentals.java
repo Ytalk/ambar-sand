@@ -22,9 +22,11 @@ public class Rentals implements Serializable, Rentables, ObjectInputValidation{
         this.rentals = new ArrayList<>();
     }
 
+
     public boolean isEmpty(){//como a lista rentals é "interna" esse método precisa ser implementado no Rentals para poder usar isEmpty externamente (main)
         return rentals.isEmpty();
     }
+
 
     public String newRental(int id, int time, boolean hasLesson){
 
@@ -38,7 +40,7 @@ public class Rentals implements Serializable, Rentables, ObjectInputValidation{
         }
         */
 
-        if(hasLesson == true){
+        if(hasLesson == true){//Rental instânciado com base em aula true ou false
             EquipmentWithLesson equipment_with_lesson = new EquipmentWithLesson(id);//passa o id para instanciar um equipamento especifico do enum
             Lesson less = new Lesson(equipment_with_lesson);//informa que há aula onde lesson é a abstração de equipamento
             Rental rental = new Rental(time, less);
@@ -54,76 +56,27 @@ public class Rentals implements Serializable, Rentables, ObjectInputValidation{
         
     }
 
-
+    
     public void saveToFile(String name){
 
-
-
-        /*JFileChooser file_chooser = new JFileChooser();
-        file_chooser.setDialogTitle("Specify a directory to save");
-
-        int user_selection = file_chooser.showSaveDialog(null);
-
-        if(user_selection == JFileChooser.APPROVE_OPTION){
-            File save_file = file_chooser.getSelectedFile();
-
-            String file_path = save_file.getAbsolutePath();
-            if (!file_path.endsWith(".txt")){
-                save_file = new File(file_path + ".txt");
-            }
-
-            if (user_selection == JFileChooser.APPROVE_OPTION) {
-                String pop_path = file_chooser.getSelectedFile().getAbsolutePath();
-                JOptionPane.showMessageDialog(null, "Arquivo salvo com sucesso em: " + pop_path, "Arquivo salvo com sucesso!", JOptionPane.INFORMATION_MESSAGE);
-            }
-            
-            
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(save_file))){
-                writer.write(txt);
-                System.out.println("Arquivo salvo com sucesso.");
-            } 
-            catch (IOException e){
-                e.printStackTrace();
-            }*/
-
-
-        
-            /*JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setDialogTitle("Escolha o diretório");
-            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            
-            int userSelection = fileChooser.showSaveDialog(null);
-            
-            if (userSelection == JFileChooser.APPROVE_OPTION) {
-                // O usuário escolheu um diretório, você pode obter o caminho assim:
-                String selectedDirectory = fileChooser.getSelectedFile().getPath();
-                System.out.println("Diretório selecionado: " + selectedDirectory);
-            } else {
-                System.out.println("Nenhum diretório selecionado.");
-            }*/
-
-
-    
         try (ObjectOutputStream writer = new ObjectOutputStream(new FileOutputStream("ambar.byte"))) {
             writer.writeObject(rentals);
             JOptionPane.showMessageDialog(null, "Salvo com sucesso!", "Salvamento", JOptionPane.INFORMATION_MESSAGE);
-        } catch (IOException e) {
+        } 
+        catch (IOException e){
             e.printStackTrace();
         }
 
-        //writer.close();
     }
+
 
     public void loadFile(){
         try (ObjectInputStream reader = new ObjectInputStream(new FileInputStream("ambar.byte"))) {
-            // Limpa a lista atual antes de carregar os dados do arquivo
-            rentals.clear();
+            rentals.clear();//limpa a lista atual antes de carregar os dados do arquivo
             
-            // Lê os objetos do arquivo e adiciona à lista
-            rentals.addAll((ArrayList<Rental>) reader.readObject());
+            rentals.addAll((ArrayList<Rental>) reader.readObject());//lê os objetos do arquivo e adiciona à lista
 
             reader.registerValidation(this, 0);
-
         } 
         
         catch (FileNotFoundException e) {
@@ -137,14 +90,15 @@ public class Rentals implements Serializable, Rentables, ObjectInputValidation{
     }
 
     @Override
-    public void validateObject() throws InvalidObjectException {
-        // Lógica de validação pós-leitura do objeto
+    public void validateObject() throws InvalidObjectException{//validação pós-leitura do objeto
+
         if (rentals == null) {
             throw new InvalidObjectException("Lista de aluguéis não foi corretamente carregada.");
         }
     }
 
-    public String listAll(){
+
+    public String listAll(){//método deixado de lado por conta do JList
         StringBuilder rentals_list = new StringBuilder();
         for(Rental rental : rentals){
             rentals_list.append(rental.toString()).append("\n\n");
@@ -153,18 +107,17 @@ public class Rentals implements Serializable, Rentables, ObjectInputValidation{
         return rentals_list.toString();
     }
 
-    public List<String> listAll2(){
+
+    public List<String> listAll2(){//método que retorna uma lista para o JList
         List<String> list = new ArrayList<>();
     
         for (int i = 0; i < rentals.size(); i++){
             list.add(rentals.get(i).toString());
     
-            // Adicione uma linha vazia entre os aluguéis, exceto para o último aluguel
-            if (i < rentals.size() - 1) {
+            if (i < rentals.size() - 1){//quebra linha, menos no último indice
                 list.add("\n=================================================");
             }
         }
-    
         return list;
     }
 
