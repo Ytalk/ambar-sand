@@ -2,6 +2,9 @@ package ambar;
 
 import java.io.Serializable;
 
+/**
+ * Classe responsável por definir as informações principais de um equipamento.
+ */
 public enum EquipmentAndValues implements Serializable{
 
     ONE("jet ski", 50.0, 30.0),//com aula?
@@ -20,6 +23,12 @@ public enum EquipmentAndValues implements Serializable{
     private double taxPerHour;
 
 
+    /**
+     * Cria novos equipamentos (enums).
+     * @param desc Nome do equipamento.
+     * @param tax Taxa básica do equipamento.
+     * @param perHour Taxa por hora do equipamento.
+     */
     EquipmentAndValues(String desc, double tax, double perHour){
         description = desc;
         basicTax = tax;
@@ -27,16 +36,28 @@ public enum EquipmentAndValues implements Serializable{
     }
 
 
+    /**
+     * Retorna descrição (nome) do equipamento.
+     * @return String descrição do equipamento.
+     */
     public String getDescription(){
         return description;
     }
     
 
+    /**
+     * Retorna taxa básica do equipamento.
+     * @return Double da taxa básica do equipamento.
+     */
     public double getBasicTax(){
         return basicTax;
     }
 
 
+    /**
+     * Retorna taxa por hora do equipamento.
+     * @return Double da taxa por hora do equipamento.
+     */
     public double getTaxPerHour(){
         return taxPerHour;
     }

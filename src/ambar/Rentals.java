@@ -17,19 +17,38 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+/**
+ * classe responsável por gerenciar os aluguéis. cria novos, armazena em lista e salva em arquivo serializado.
+ */
 public class Rentals implements Serializable, Rentables, ObjectInputValidation{
     private ArrayList<Rental> rentals;
 
+
+    /**
+     * Inicializa ArrayList de aluguéis.
+     */
     public Rentals(){
         this.rentals = new ArrayList<>();
     }
 
 
+    /**
+     * Usa o método isEmpty da ArrayList para que ele possa ser usada fora dessa classe que contém a lista
+     * @return Se a lista está vazia (true) ou não (false).
+     */
     public boolean isEmpty(){//como a lista rentals é "interna" esse método precisa ser implementado no Rentals para poder usar isEmpty externamente (main)
         return rentals.isEmpty();
     }
 
 
+    /**
+     * Cria um novo aluguel e adiciona à lista ou dispara uma exceção caso o id não exista.
+     * @param id Determina qual será o equipamento alugado.
+     * @param time Tempo de aluguel em minutos.
+     * @param hasLesson Determina se o aluguel terá aula para utilizar o equipamento.
+     * @return String com informações do aluguel.
+     * @throws InvalidEquipmentException
+     */
     public String newRental(int id, int time, boolean hasLesson) throws InvalidEquipmentException{
 
         if(hasLesson == true){//Rental instânciado com base em aula true ou false
@@ -49,9 +68,12 @@ public class Rentals implements Serializable, Rentables, ObjectInputValidation{
     }
 
     
-    public void saveToFile(String name){
+    /**
+     * Salva a lista rentals em bytes (serialização).
+     */
+    public void saveToFile(){
 
-        try(ObjectOutputStream writer = new ObjectOutputStream(new FileOutputStream("ambar.byte"))){//cria OOS para escrever. FOS abre arquivo para para escrever bytes
+        try(ObjectOutputStream writer = new ObjectOutputStream(new FileOutputStream("src/ambar/ambar.byte"))){//cria OOS para escrever. FOS abre arquivo para para escrever bytes
             writer.writeObject(rentals);//escreve rentals no arquivo
             JOptionPane.showMessageDialog(null, "Salvo com sucesso!", "Salvamento", JOptionPane.INFORMATION_MESSAGE);
         } 
@@ -61,14 +83,17 @@ public class Rentals implements Serializable, Rentables, ObjectInputValidation{
     }
 
 
+    /**
+     * Lê e deserializa um arquivo serializado chamado "ambar.byte" para uma lista de Rental.
+     */
     public void loadFile(){//carrega dados para a lista rentals
 
-        try(ObjectInputStream reader = new ObjectInputStream(new FileInputStream("ambar.byte"))){//cria OIS para ler objetos do arquivo
+        try(ObjectInputStream reader = new ObjectInputStream(new FileInputStream("src/ambar/ambar.byte"))){//cria OIS para ler objetos do arquivo
             rentals.clear();//limpa a lista atual antes de carregar os dados do arquivo ambar
             
             rentals.addAll((ArrayList<Rental>) reader.readObject());//lê os objetos serializados do arquivo e adiciona à lista rentals
 
-            reader.registerValidation(this, 0);//registra o objeto para validação. intância atual "rentals", validação imediata. (implementa a interface, prioridade de validação/ordem/quanto menor mais prioridade)
+            //reader.registerValidation(this, 0);//registra o objeto para validação. intância atual "rentals", validação imediata (prioridade 0).
         } 
         
         catch (FileNotFoundException e){
@@ -76,10 +101,13 @@ public class Rentals implements Serializable, Rentables, ObjectInputValidation{
         }
         
         catch (IOException | ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Não foi possível carregar a lista", JOptionPane.ERROR_MESSAGE);
-        }  
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Algo deu errado ao carregar a lista", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
+    /**
+     * Valida a leitura na deserialização. Não está em uso pois sua validação é severa.
+     */
     @Override
     public void validateObject() throws InvalidObjectException{//validação personalizada após leitura do objeto. parte da interface OIV
 
@@ -89,7 +117,11 @@ public class Rentals implements Serializable, Rentables, ObjectInputValidation{
     }
 
 
-    public String listAll(){//método deixado de lado por conta do JList
+    /**
+     * Lista todas as informações da lista rentals.
+     * @return String com todas as infromações dos aluguéis.
+     */
+    public String listAll(){
         StringBuilder rentals_list = new StringBuilder();
         for(Rental rental : rentals){
             rentals_list.append(rental.toString()).append("\n===================================================\n\n");

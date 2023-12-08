@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.awt.*;//color
+import java.awt.Color;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -33,11 +35,17 @@ public class AmbarSandAPP extends JFrame{
     Rentals rentals = new Rentals();
     int id = 1;//valor iniciado no estado natural
     boolean lesson;
+    
+    
 
+    /**
+     * Interface gráfica do programa.
+     */
     public AmbarSandAPP(){
-        rentals.loadFile();
 
-        
+        rentals.loadFile();//inicia com os dados (se houver)
+    
+
 
         //MENUBAR
         JMenuBar mb = new JMenuBar();  
@@ -54,8 +62,7 @@ public class AmbarSandAPP extends JFrame{
         salvar.addActionListener(new ActionListener(){//primeira classe anônima
             @Override
             public void actionPerformed(ActionEvent e){
-                rentals.saveToFile("null");
-                JOptionPane.showMessageDialog(null, "Salvo com sucesso!", "Salvamento concluido", JOptionPane.INFORMATION_MESSAGE);
+                rentals.saveToFile();
             }
         });
 
@@ -78,7 +85,7 @@ public class AmbarSandAPP extends JFrame{
 
 
 
-        //CHECKBOX
+        //CHECKBOX DE AULA
         JCheckBox check_box = new JCheckBox("incluir aula");
         check_box.setBounds(530, 250, 90, 30);//posição e tamanho
         check_box.setBackground(new Color(255, 191, 0));
@@ -172,6 +179,7 @@ public class AmbarSandAPP extends JFrame{
 
 
 
+        //LISTA TODOS OS ALUGUÉIS
         JButton list_button = new JButton("Listar Aluguéis");
         list_button.setBounds(485, 300, 136, 30);//posição e tamanho
         add(list_button);
@@ -210,11 +218,12 @@ public class AmbarSandAPP extends JFrame{
         pack();//empacota/organiza
         setLocationRelativeTo(null);//centraliza
         setVisible(true);
-        
     }
 
-        
 
+    /**
+     * Main do Programa.
+     */
     public static void main(String[]args){
         new AmbarSandAPP();
     }

@@ -2,6 +2,9 @@ package ambar;
 
 import java.io.Serializable;
 
+/**
+ * classe responsável por definir o conteúdo de um equipamento.
+ */
 public abstract class Equipment implements Serializable, Constants{
 
     private int type;
@@ -10,6 +13,10 @@ public abstract class Equipment implements Serializable, Constants{
     private boolean canHaveLesson;
 
 
+    /**
+     * Define uma enum (o equipamento propriamente dito).
+     * @param id Determina qual será o equipamento alugado.
+     */
     public Equipment(int id){//id responsável por atribuir enum
 
         switch (id){
@@ -54,36 +61,64 @@ public abstract class Equipment implements Serializable, Constants{
     }
 
 
+    /**
+     * Cálcula o valor total do aluguel.
+     * @param time Tempo de aluguel em minutos.
+     * @return Valor total do aluguel.
+     */
     public double getValue(int time){//calculo valor total do aluguel, mas não usa-o diretamente
         return (equipment_and_values.getBasicTax() + (equipment_and_values.getTaxPerHour() * ( (double) time / MINUTESPERHOUR ) ));//sem cast ele considera como int por conta do time
     }
 
 
+    /**
+     * Retorna a enum.
+     * @return Enum com as informações principais de um equipamento.
+     */
     public EquipmentAndValues getEquipmentAndValues(){
         return equipment_and_values;
     }
 
 
+    /**
+     * Define se terá aula ou não.
+     * @param lesson tem aula (true); não tem aula (false).
+     */
     public void setCanHaveLesson(boolean lesson){
         canHaveLesson = lesson;
     }
 
 
+    /**
+     * Retorna se tem aula ou não.
+     * @return boolean responsável pela aula.
+     */
     public boolean getCanHaveLesson(){
         return canHaveLesson;
     }
 
 
+    /**
+     * Retorna String da descrição (nome) do equipamento.
+     * @return String do nome do equipamento.
+     */
     public String getDescription(){
         return description;
     }
 
 
+    /**
+     * Retorna o tipo (id) do equipamento.
+     * @return Int responsável por definir o equipamento (id).
+     */
     public int getType(){
         return type;
     }
 
 
+    /**
+     * Retorna String com todas as informações de um equipamento alugado.
+     */
     public String toString(){
         StringBuilder equip_str = new StringBuilder();
     
