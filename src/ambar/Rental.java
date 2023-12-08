@@ -1,14 +1,14 @@
 package ambar;
 
 import java.io.Serializable;
-import java.util.concurrent.atomic.AtomicLong;
+import java.security.SecureRandom;
 
 /**
  * Contém as informações gerais de um alugel.
  */
 public class Rental implements Serializable{
 
-    private static final AtomicLong contract_counter = new AtomicLong(1);//cria contador para instâncias únicas
+    SecureRandom random = new SecureRandom();//inicializa um SecureRandom para os números únicos de contratos
 
     private long contract;
     private int time;
@@ -22,7 +22,7 @@ public class Rental implements Serializable{
      * @param equip Equipamento alugado.
      */
     public Rental(int time, Equipment equip){
-        this.contract = contract_counter.getAndIncrement();
+        this.contract = random.nextLong();//gera um número random de 64 bits (dúvido que repita)
         this.time = time; 
         price = equip.getValue(time);
         this.equip = equip;

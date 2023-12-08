@@ -2,8 +2,8 @@ package ambar;
 
 import java.util.ArrayList;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.Color;
 import java.awt.BorderLayout;
@@ -12,6 +12,7 @@ import java.awt.Dimension;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -35,7 +36,7 @@ public class AmbarSandAPP extends JFrame{
     Rentals rentals = new Rentals();
     int id = 1;//valor iniciado no estado natural
     boolean lesson;
-    
+    boolean auto = true;//auto save inicia ativo
     
 
     /**
@@ -47,26 +48,57 @@ public class AmbarSandAPP extends JFrame{
     
 
 
+
         //MENUBAR
-        JMenuBar mb = new JMenuBar();  
-        JMenu menu = new JMenu("file");
-        JMenuItem salvar = new JMenuItem("salvar");
-
-        menu.add(salvar);
-        mb.add(menu);
+        JMenuBar mb = new JMenuBar(); 
         add(mb);
-
         mb.setBackground(new Color (255, 160, 0));
         setJMenuBar(mb);
 
-        salvar.addActionListener(new ActionListener(){//primeira classe anônima
+
+        //menu responsável por abrir e fechar o arquivo serializado
+        JMenu file_menu = new JMenu("File");
+        JMenuItem exit = new JMenuItem("Fechar Lista");
+        file_menu.add(exit);
+        JMenuItem open = new JMenuItem("Abrir Lista");
+        file_menu.add(open);
+        mb.add(file_menu);
+
+        exit.addActionListener(new ActionListener(){//limpa a lista rentals (primeira classe anônima)
             @Override
             public void actionPerformed(ActionEvent e){
-                rentals.saveToFile();
+                rentals.clear();
+                JOptionPane.showMessageDialog(null, "Lista de aluguéis fechada com sucesso!", "Lista Fechada", JOptionPane.INFORMATION_MESSAGE);
             }
         });
 
+        open.addActionListener(new ActionListener(){//abre os dados novamente (se houver)
+            @Override
+            public void actionPerformed(ActionEvent e){
+                rentals.loadFile();
+                JOptionPane.showMessageDialog(null, "Lista de aluguéis carregada com sucesso!", "Lista Aberta", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
+
+        //menu responsável por salvar arquivo, ativar e desativar salvamento automático
+        JMenu save_menu = new JMenu("Save");
+        JMenuItem save = new JMenuItem("Salvar");
+        JCheckBoxMenuItem auto_save = new JCheckBoxMenuItem("Salvamento Automático: " + (auto ? "on" : "off") );
+        save_menu.add(save);
+        save_menu.add(auto_save);
+        mb.add(save_menu);
         
+        save.addActionListener(e -> rentals.saveToFile());//lambda simplificadasso
+
+        auto_save.setSelected(auto);//inicia marcada a box do auto save
+        auto_save.addItemListener(e -> {//classe anônima e ainda mais compacta (só final por conta do lambda)
+            auto = e.getStateChange() == ItemEvent.SELECTED;
+            auto_save.setText("Salvamento Automático: " + (auto ? "on" : "off"));
+        });
+        
+        
+
 
         //PAINEL RELACIONADO AO TEMPO
         JPanel time_panel = new JPanel(new BorderLayout());
@@ -85,13 +117,14 @@ public class AmbarSandAPP extends JFrame{
 
 
 
+
         //CHECKBOX DE AULA
         JCheckBox check_box = new JCheckBox("incluir aula");
         check_box.setBounds(530, 250, 90, 30);//posição e tamanho
         check_box.setBackground(new Color(255, 191, 0));
         add(check_box);
 
-        check_box.addItemListener(e -> {//primeira classe anônima compacta
+        check_box.addItemListener(e -> {//classe anônima compacta
             if(e.getStateChange() == ItemEvent.SELECTED){//usando 'e' para aprender
                 lesson = true;
             } 
@@ -99,6 +132,7 @@ public class AmbarSandAPP extends JFrame{
                 lesson = false;
             }
         });
+
 
 
 
@@ -135,6 +169,7 @@ public class AmbarSandAPP extends JFrame{
 
 
 
+
         //ALUGA OU TRATA ERRO
         JButton Confirm_button = new JButton("Confirmar Aluguel");
         Confirm_button.setBounds(220, 300, 136, 30);
@@ -162,7 +197,11 @@ public class AmbarSandAPP extends JFrame{
 
                             String confirmation_str = rentals.newRental(id, time, lesson);
 
-                            JOptionPane.showMessageDialog(null, confirmation_str, "Compra finalizada", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(null, confirmation_str, "Compra Finalizada", JOptionPane.INFORMATION_MESSAGE);
+
+                            if(auto == true){
+                                rentals.saveToFile();
+                            }
                         }
                         catch(InvalidEquipmentException ex){
                             ex.showMessage();
@@ -179,6 +218,7 @@ public class AmbarSandAPP extends JFrame{
 
 
 
+
         //LISTA TODOS OS ALUGUÉIS
         JButton list_button = new JButton("Listar Aluguéis");
         list_button.setBounds(485, 300, 136, 30);//posição e tamanho
@@ -187,11 +227,11 @@ public class AmbarSandAPP extends JFrame{
         list_button.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 if(rentals.isEmpty()){
-                    JOptionPane.showMessageDialog(null, "Ainda não há alugueis!", "Lista vazia", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Ainda não há alugueis!", "Lista Vazia", JOptionPane.INFORMATION_MESSAGE);
                 } 
                 else{
                     JDialog list_frame = new JDialog();//moldura da lista
-                    list_frame.setTitle("Lista de aluguéis");
+                    list_frame.setTitle("Lista de Aluguéis");
                     list_frame.setSize(new Dimension(400, 400));
                     list_frame.setLocationRelativeTo(null);
                     list_frame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -206,6 +246,7 @@ public class AmbarSandAPP extends JFrame{
                 }
             }
         });
+
 
 
 

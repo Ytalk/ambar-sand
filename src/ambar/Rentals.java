@@ -33,11 +33,19 @@ public class Rentals implements Serializable, Rentables, ObjectInputValidation{
 
 
     /**
-     * Usa o método isEmpty da ArrayList para que ele possa ser usada fora dessa classe que contém a lista
+     * Usa o método isEmpty da ArrayList para que ele possa ser usado fora dessa classe que contém a lista
      * @return Se a lista está vazia (true) ou não (false).
      */
     public boolean isEmpty(){//como a lista rentals é "interna" esse método precisa ser implementado no Rentals para poder usar isEmpty externamente (main)
         return rentals.isEmpty();
+    }
+
+
+    /**
+     * Usa o método clear da ArrayList para que ele possa ser usado fora dessa classe que contém a lista
+     */
+    public void clear(){
+        rentals.clear();
     }
 
 
