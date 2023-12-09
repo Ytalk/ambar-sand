@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
+import java.io.File;
 import java.awt.Color;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -38,13 +39,16 @@ public class AmbarSandAPP extends JFrame{
     boolean lesson;
     boolean auto = true;//auto save inicia ativo
     
+    File rentals_file = new File("ambar.byte");
 
     /**
      * Interface gráfica do programa.
      */
     public AmbarSandAPP(){
 
-        rentals.loadFile();//inicia com os dados (se houver)
+        if(rentals_file.exists()){//inicia com os dados caso exista
+            rentals.loadFile();
+        }
     
 
 
@@ -58,7 +62,7 @@ public class AmbarSandAPP extends JFrame{
 
         //menu responsável por abrir e fechar o arquivo serializado
         JMenu file_menu = new JMenu("File");
-        JMenuItem exit = new JMenuItem("Fechar Lista");
+        JMenuItem exit = new JMenuItem("Limpar Lista");
         file_menu.add(exit);
         JMenuItem open = new JMenuItem("Abrir Lista");
         file_menu.add(open);
@@ -67,8 +71,13 @@ public class AmbarSandAPP extends JFrame{
         exit.addActionListener(new ActionListener(){//limpa a lista rentals (primeira classe anônima)
             @Override
             public void actionPerformed(ActionEvent e){
-                rentals.clear();
-                JOptionPane.showMessageDialog(null, "Lista de aluguéis fechada com sucesso!", "Lista Fechada", JOptionPane.INFORMATION_MESSAGE);
+                if(rentals.isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Não há lista para limpar!", "Lista Vazia", JOptionPane.WARNING_MESSAGE);
+                }
+                else{
+                    rentals.clear();
+                    JOptionPane.showMessageDialog(null, "Lista de aluguéis limpa com sucesso!", "Lista Limpa", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
         });
 
@@ -76,7 +85,6 @@ public class AmbarSandAPP extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e){
                 rentals.loadFile();
-                JOptionPane.showMessageDialog(null, "Lista de aluguéis carregada com sucesso!", "Lista Aberta", JOptionPane.INFORMATION_MESSAGE);
             }
         });
 

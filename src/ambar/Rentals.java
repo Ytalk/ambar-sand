@@ -102,10 +102,11 @@ public class Rentals implements Serializable, Rentables, ObjectInputValidation{
             rentals.addAll((ArrayList<Rental>) reader.readObject());//lê os objetos serializados do arquivo e adiciona à lista rentals
 
             //reader.registerValidation(this, 0);//registra o objeto para validação. intância atual "rentals", validação imediata (prioridade 0).
+            JOptionPane.showMessageDialog(null, "Lista de aluguéis carregada com sucesso!", "Lista Aberta", JOptionPane.INFORMATION_MESSAGE);
         } 
         
         catch (FileNotFoundException e){
-            JOptionPane.showMessageDialog(null, "Seja bem-vindo ao Ambar Sand!", "Boas-vindas", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "O arquivo serializado que contém a lista de aluguéis não foi encontrado!", "Lista Não Encontrada", JOptionPane.ERROR_MESSAGE);
         }
         
         catch (IOException | ClassNotFoundException e) {
