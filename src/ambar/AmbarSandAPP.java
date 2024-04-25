@@ -33,8 +33,8 @@ import javax.swing.UIManager;
 import javax.swing.DefaultListCellRenderer;
 
 public class AmbarSandAPP extends JFrame{
-    
-    Rentals rentals = new Rentals();
+
+    Rentables rentals = new Rentals();
     int id = 1;//valor iniciado no estado natural
     boolean lesson;
     boolean auto = true;//auto save inicia ativo

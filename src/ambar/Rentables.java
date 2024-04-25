@@ -12,5 +12,10 @@ public interface Rentables{
     public String listAll();
 
     //public int size(); //não implementado para não deixar o código redundante.
-    
+
+    public void loadFile();
+
+    public boolean isEmpty();
+
+    public void clear();
 }
